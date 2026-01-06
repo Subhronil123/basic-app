@@ -1,5 +1,19 @@
 import KPICard from "../components/KPICard";
-import { kpis } from "../data/mockData.js";
+import { kpis, accuracyData, apiUsageData } from "../data/mockData.js";
+
+import {
+    LineChart,
+    Line,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    ResponsiveContainer,
+    BarChart,
+    Bar,
+} from "recharts";
+
+import ChartCard from "../components/ChartCard";
 
 export default function DashboardHome() {
     return (
@@ -13,10 +27,6 @@ export default function DashboardHome() {
                 </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {/* <KPICard title="Model Accuracy" value="97.345%" icon="👥" color="border-l-blue-500" />
-                <KPICard title="API Requests" value="$452" icon="💰" color="border-l-green-500" />
-                <KPICard title="Operational Cost" value="10000" icon="📦" color="border-l-purple-500" />
-                <KPICard title="Active Models" value="10" icon="📈" color="border-l-yellow-500" /> */}
                 {kpis.map((kpi) => (
                     <KPICard
                         key={kpi.id}
@@ -27,23 +37,29 @@ export default function DashboardHome() {
                     />
                 ))}
             </div>
-            <div className="grid grid-cols-1xl grid-cols-2 gap-6">
-                <div className="bg-white rounded-xl shadow p-6 h-64">
-                    <h3 className="text-lg font-bold text-gray-800 mb-4">
-                        Model Accuracy
-                    </h3>
-                    <div className="h-40 bg-gray-100 flex items-center justify-center text-gray-400">
-                        line chart
-                    </div>
-                </div>
-                <div className="bg-white rounded-xl shadow p-6 h-64">
-                    <h3 className="text-lg font-bold text-gray-800 mb-4">
-                        API Usage
-                    </h3>
-                    <div className="h-40 bg-gray-100 flex items-center justify-center text-gray-400">
-                        bar chart
-                    </div>
-                </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <ChartCard title="Model Accuracy">
+                    <ResponsiveContainer width="100%" height={300}>
+                        <LineChart data={accuracyData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="name" />
+                            <YAxis domain={[85, 100]} />
+                            <Tooltip />
+                            <Line type="monotone" dataKey="accuracy" stroke="#8884d8" strokeWidth={8} dot={false} />
+                        </LineChart>
+                    </ResponsiveContainer>
+                </ChartCard>
+                <ChartCard title="API Usage">
+                    <ResponsiveContainer width="100%" height={300}>
+                        <BarChart data={apiUsageData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="name" />
+                            <YAxis />
+                            <Tooltip />
+                            <Bar dataKey="usage" fill="#82ca9d" />
+                        </BarChart>
+                    </ResponsiveContainer>
+                </ChartCard>
             </div>
         </section>
     );
