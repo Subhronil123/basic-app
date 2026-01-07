@@ -2,6 +2,9 @@ import { useMemo, useState } from "react";
 import { analyticsData } from "../data/analyticsData";
 import AnalyticsFilters from "../components/AnalyticsFilters";
 import ChartCard from "../components/ChartCard";
+import AnalyticsKPICard from "../components/AnalyticsKPICard";
+import DataTable from "../components/DataTable";
+import { tableData } from "../data/tableData";
 import {
   LineChart,
   Line,
@@ -17,24 +20,50 @@ export default function Analytics() {
   const [endDate, setEndDate] = useState("2025-01-07");
   const [compare, setCompare] = useState(false);
  
+  /* ---------------- FILTER DATA ---------------- */
   const filteredData = useMemo(() => {
     return analyticsData.filter(
       (d) => d.date >= startDate && d.date <= endDate
     );
   }, [startDate, endDate]);
  
-  const previousData = useMemo(() => {
-    if (!compare) return [];
+  /* ---------------- MERGE DATA FOR COMPARISON ---------------- */
+  const chartData = useMemo(() => {
+    if (!compare) return filteredData;
+ 
     return filteredData.map((d) => ({
       ...d,
-      [metric]: Math.floor(d[metric] * 0.8),
+      previous: Math.floor(d[metric] * 0.8),
     }));
-  }, [compare, filteredData, metric]);
+  }, [filteredData, compare, metric]);
  
+  /* ---------------- KPI SUMMARY ---------------- */
+  const summary = useMemo(() => {
+    if (!filteredData.length) return null;
+ 
+    const totalUsers = filteredData.reduce((s, d) => s + d.users, 0);
+    const totalRevenue = filteredData.reduce((s, d) => s + d.revenue, 0);
+    const avgUsers = Math.round(totalUsers / filteredData.length);
+ 
+    const growth =
+      filteredData.length > 1
+        ? (
+            ((filteredData.at(-1)[metric] -
+              filteredData[0][metric]) /
+              filteredData[0][metric]) *
+            100
+          ).toFixed(1)
+        : 0;
+ 
+    return { totalUsers, totalRevenue, avgUsers, growth };
+  }, [filteredData, metric]);
+ 
+  /* ---------------- JSX ---------------- */
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold">Advanced Analytics</h2>
  
+      {/* Filters */}
       <AnalyticsFilters
         metric={metric}
         setMetric={setMetric}
@@ -46,9 +75,33 @@ export default function Analytics() {
         setCompare={setCompare}
       />
  
+      {/* KPI SUMMARY */}
+      {summary && (
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <AnalyticsKPICard
+            title="Total Users"
+            value={summary.totalUsers.toLocaleString()}
+          />
+          <AnalyticsKPICard
+            title="Total Revenue"
+            value={`$${summary.totalRevenue.toLocaleString()}`}
+          />
+          <AnalyticsKPICard
+            title="Avg Daily Users"
+            value={summary.avgUsers.toLocaleString()}
+          />
+          <AnalyticsKPICard
+            title="Growth"
+            value={`${summary.growth}%`}
+            subtitle={`Based on ${metric}`}
+          />
+        </div>
+      )}
+ 
+      {/* CHART */}
       <ChartCard title={`Metric Trend (${metric})`}>
         <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={filteredData}>
+          <LineChart data={chartData}>
             <XAxis dataKey="date" />
             <YAxis />
             <Tooltip />
@@ -63,8 +116,7 @@ export default function Analytics() {
             {compare && (
               <Line
                 type="monotone"
-                dataKey={metric}
-                data={previousData}
+                dataKey="previous"
                 stroke="#94a3b8"
                 strokeDasharray="5 5"
               />
@@ -72,7 +124,7 @@ export default function Analytics() {
           </LineChart>
         </ResponsiveContainer>
       </ChartCard>
+      <DataTable data={tableData} />
     </div>
   );
 }
- 
