@@ -13,9 +13,14 @@ import {
   Legend,
 } from "recharts";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import KPISkeleton from "../components/KPISkeleton";
 import ChartSkeleton from "../components/ChartSkeleton";
+import KeyInsights from "../components/KeyInsights";
+import { generateInsights } from "../utils/insightGenerator";
+import { goals } from "../data/goalData";
+import GoalCard from "../components/GoalCard";
+import GoalDetails from "../components/GoalDetails";
  
 export default function Dashboard() {
 
@@ -24,6 +29,12 @@ export default function Dashboard() {
     const timer = setTimeout(() => setLoading(false), 1200);
     return () => clearTimeout(timer);
   }, []);
+
+  const insights = useMemo(() => {
+    return generateInsights(chartData);
+  }, []);
+
+  const [activeGoal, setActiveGoal] = useState(null);
   
   return (
     <div className="space-y-6">
@@ -36,7 +47,33 @@ export default function Dashboard() {
             ))
           : kpis.map((kpi) => <KPICard key={kpi.title} {...kpi} />)}
       </div>
+      
+      {/* Key Insights */}
+      <KeyInsights insights={insights} />
+
+      {/* Goals Section */}
+      <div className="space-y-4">
+        <h3 className="text-xl font-semibold">Goals & Targets</h3>
+      
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {goals.map((goal) => (
+            <GoalCard
+              key={goal.id}
+              goal={goal}
+              onExpand={setActiveGoal}
+            />
+          ))}
+        </div>
+      
+        {activeGoal && (
+          <GoalDetails
+            goal={activeGoal}
+            onClose={() => setActiveGoal(null)}
+          />
+        )}
+      </div>
  
+
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         

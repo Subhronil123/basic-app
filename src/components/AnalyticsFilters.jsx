@@ -1,4 +1,5 @@
 import { getPresetRange } from "../utils/dataRanges";
+import { useActivity } from "../context/ActivityContext";
  
 export default function AnalyticsFilters({
   metric,
@@ -10,11 +11,14 @@ export default function AnalyticsFilters({
   compare,
   setCompare,
 }) {
+
+  const { logActivity } = useActivity();
   const applyPreset = (type) => {
     const range = getPresetRange(type);
     if (!range) return;
     setStartDate(range.startDate);
     setEndDate(range.endDate);
+    logActivity(`Applied a date preset filter: ${type}`);
   };
  
   return (
