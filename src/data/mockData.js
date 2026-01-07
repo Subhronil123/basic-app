@@ -1,51 +1,14 @@
 export const kpis = [
-  {
-    id: 1,
-    title: "Model Accuracy",
-    value: "92%",
-    color: "bg-green-500",
-    icon: "⭐",
-  },
-  {
-    id: 2,
-    title: "API Requests",
-    value: "1.3M",
-    color: "bg-blue-500",
-    icon: "📊",
-  },
-  {
-    id: 3,
-    title: "Operational Cost",
-    value: "$12,400",
-    color: "bg-purple-500",
-    icon: "💲",
-  },
-  {
-    id: 4,
-    title: "Active Models",
-    value: "5",
-    color: "bg-orange-500",
-    icon: "🧠",
-  },
-];
-
-export const accuracyData = [
-  { time: "Mon", accuracy: 88 },
-  { time: "Tue", accuracy: 89 },
-  { time: "Wed", accuracy: 91 },
-  { time: "Thu", accuracy: 92 },
-  { time: "Fri", accuracy: 91 },
-  { time: "Sat", accuracy: 93 },
-  { time: "Sun", accuracy: 92 },
+  { title: "Revenue", value: "$124,500", change: "+12.4%" },
+  { title: "Users", value: "8,430", change: "+5.1%" },
+  { title: "Conversion", value: "3.24%", change: "+1.2%" },
+  { title: "System Health", value: "99.9%", change: "Stable" },
 ];
  
-export const apiUsageData = [
-  { time: "Mon", requests: 120 },
-  { time: "Tue", requests: 210 },
-  { time: "Wed", requests: 180 },
-  { time: "Thu", requests: 260 },
-  { time: "Fri", requests: 300 },
-  { time: "Sat", requests: 220 },
-  { time: "Sun", requests: 190 },
+export const chartData = [
+  { name: "Jan", users: 400 },
+  { name: "Feb", users: 600 },
+  { name: "Mar", users: 800 },
+  { name: "Apr", users: 700 },
+  { name: "May", users: 1000 },
 ];
- 

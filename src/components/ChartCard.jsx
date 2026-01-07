@@ -1,10 +1,8 @@
 export default function ChartCard({ title, children }) {
-    return (
-        <div className="bg-white rounded-xl shadow p-6">
-            <h3 className="text-lg font-bold text-gray-800 mb-4">
-                {title}
-            </h3>
-                {children}
-        </div>
-    )
+  return (
+    <div className="bg-slate-800 rounded-2xl p-5 shadow">
+      <h3 className="font-semibold mb-4">{title}</h3>
+      {children}
+    </div>
+  );
 }

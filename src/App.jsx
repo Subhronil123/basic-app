@@ -1,20 +1,17 @@
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
-
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
-import DashboardHome from "./pages/dashboardHome";
-
-const router = createBrowserRouter([
+import Analytics from "./pages/Analytics";
+import Settings from "./pages/Settings";
+import Layout from "./components/Layout";
+ 
+export const router = createBrowserRouter([
   {
-    path: "",
-    element: <Dashboard />,
+    path: "/",
+    element: <Layout />,
     children: [
-      {
-        index: "true",
-        element: <DashboardHome />,
-      },
+      { index: true, element: <Dashboard /> },
+      { path: "analytics", element: <Analytics /> },
+      { path: "settings", element: <Settings /> },
     ],
   },
 ]);

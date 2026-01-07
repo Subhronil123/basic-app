@@ -1,13 +1,9 @@
-export default function KPICard({ title, value, icon, color }) {
-    return (
-        <div className={`bg-white rounded-xl shadow p-5 flex item-center gap-4 ${color}`}>
-            <div className="flex items-center justify-between">
-                <div>
-                    <p className="text-gray-500 text-sm">{title}</p>
-                    <p className="text-xl font-bold">{value}</p>
-                </div>
-                <div className="text-2xl">{icon}</div>
-            </div>
-        </div>
-    );
+export default function KPICard({ title, value, change }) {
+  return (
+    <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow transition">
+      <p className="text-sm text-slate-500 dark:text-slate-400">{title}</p>
+      <h3 className="text-2xl font-bold mt-2">{value}</h3>
+      <span className="text-green-500 text-sm">{change}</span>
+    </div>
+  );
 }
